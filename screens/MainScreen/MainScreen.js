@@ -1,22 +1,42 @@
 import { StatusBar } from 'expo-status-bar';
 import { Pressable, Text, TextInput, View } from 'react-native';
-import {LinearGradient} from 'expo-linear-gradient';
 import {styles} from './styles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
+import { getLocalStore, localStoreInit } from '../../functions/initialize';
 
 const MainScreen = ({navigation}) => {
-  const [name, setName] = useState('')
+  const [userName, setUserName] = useState('')
   const [codeGame, setCodeGame] = useState('')
-console.log('navigation', navigation);
+
   const onChangeText = (setValue) => (value) => {
     setValue(value)
   };
 
-  const onSubmit = (event) => {
-    console.log('event');
-     navigation.navigate('Game', {name: 'Jane'})
+  // const userValidation = (type, value) => {
+  //   if(type === 'userName' && value < 4) {
+  
+  //   }
+  // };
+
+  const onSubmit = async (event) => {
+    // Set local store
+    await localStoreInit('userName', userName)
+    await localStoreInit('codeGame', codeGame)
+
+    navigation.navigate('Game')
   };
+
+  useEffect(() => {
+    (async () => {
+      const name = await getLocalStore('userName')
+      const code = await getLocalStore('codeGame')
+
+      setUserName(name)
+      setCodeGame(code)
+    
+    })()
+  }, []);
 
   return (
     <View style={styles.wrapper}>
@@ -26,8 +46,8 @@ console.log('navigation', navigation);
           <Text style={styles.title}>Your name:</Text>
           <TextInput
             style={styles.input}
-            onChangeText={onChangeText(setName)}
-            value={name}
+            onChangeText={onChangeText(setUserName)}
+            value={userName}
           />
         </View>
         <View style={styles.inputContainer}>

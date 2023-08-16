@@ -1,8 +1,10 @@
+export const headerHeight = 90
+
 const header = {
   position: 'absolute',
   top: 0,
   width: '100%',
-  height: 90,
+  height: headerHeight,
   alignItems: 'center',
   justifyContent: 'center',
   backdropFilter: 'blur(2.5px)',
